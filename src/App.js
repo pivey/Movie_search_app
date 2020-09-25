@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import axios from 'axios';
 import s, { css } from 'styled-components';
 import BarLoader from 'react-spinners/BarLoader';
@@ -25,6 +25,7 @@ const SearchInput = s.input.attrs(() => ({
   width: 50vw;
   font-size: 1.5rem;
   padding: 1rem;
+  margin: 1rem 0;
   border-radius: 1rem;
   font-family: roboto;
   border: none;
@@ -88,20 +89,31 @@ function movieReducer(state = initialState, action) {
 }
 
 function App() {
-  const [appState, setDispatchAction] = React.useReducer(
-    movieReducer,
-    initialState
-  );
+  const [appState, setDispatchAction] = useReducer(movieReducer, initialState);
 
-  const config = async () =>
-    axios(
-      `https://api.themoviedb.org/3/configuration?api_key=f11b5053bc5fb7fa9f5aadb798a4e21f`
-    );
+  useEffect(() => {
+    const isCacheSupported = 'caches' in window;
+    const config = async () =>
+      axios(
+        `https://api.themoviedb.org/3/configuration?api_key=f11b5053bc5fb7fa9f5aadb798a4e21f`
+      );
 
-  (async () => {
-    const configRes = await config();
-    console.log('here is your config', configRes.data.images);
-  })();
+    (async () => {
+      const cacheName = 'imageConfig';
+      const cacheDataExists = caches.has(cacheName).then((boolean) => {
+        console.log(boolean, 'it exists');
+      });
+      const configRes = await config();
+      if (isCacheSupported && !cacheDataExists) {
+        caches.open(cacheName).then((cache) => {
+          cache.add(configRes).then(() => {
+            console.log('Data cached');
+          });
+        });
+      }
+      console.log('here is your config', configRes.data.images);
+    })();
+  }, []);
 
   const searchMovies = async (val) => {
     setDispatchAction(setLoadingAction(true));

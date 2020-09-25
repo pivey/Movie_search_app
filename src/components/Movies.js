@@ -5,14 +5,10 @@ const MovieContainer = s.div`
   display: grid;
   grid-gap: 1.25rem;
   grid-template-columns: repeat( auto-fill, minmax(200px, 1fr));
-  margin-top: 1rem;
   overflow: scroll;
+  padding: 1rem;
   width: 100%;
-  padding: 2rem;
-  &:last-child {
-    margin-bottom: 2rem;
-  }
-`;
+  `;
 
 const MovieCard = s.div`
   background-color: #505168;
@@ -23,14 +19,17 @@ const MovieCard = s.div`
   color: #fff;
   border-radius: 10px;
   position: relative;
+  &:last-child {
+    margin-bottom: 4rem;
+  }
   `;
 
 const MovieImg = s.img`
   display: block;
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
 `;
 
@@ -54,7 +53,7 @@ const Movies = ({ list = [] }) => {
             return (
               <MovieCard key={el.id}>
                 <MovieImg
-                  src={`https://image.tmdb.org/t/p/original${el.poster_path}`}
+                  src={`https://image.tmdb.org/t/p/w342${el.poster_path}`}
                 />
                 <Rating className={`c100 p${rating} small lightBlue`}>
                   <span>{`${rating}%`}</span>

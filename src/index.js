@@ -10,8 +10,6 @@ const GlobalStyles = createGlobalStyle`
   html, body {
     margin: 0;
     padding: 0;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
     box-sizing: border-box;
     font-family: 'Fira Sans', sans-serif;
   }
